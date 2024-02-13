@@ -1,0 +1,116 @@
+<div fxLayout="row" fxLayoutAlign="space-between center">
+    <nav class="navbar navbar-expand-lg navbar-light db-nav ng-scope metric-search-nav">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="javascript:void(0)">
+                <img src="https://www.lpu.in/images/logo/logo.svg" />
+            </a>
+            <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+							<span class="navbar-toggler-icon"></span>
+					</button> -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav m-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <h2 class="font-weight-bold">
+                            <strong style="font-size: 24px;">Outcome Based Planner Construction - <span class="themeClr">Stage Allocation Date Update </span></strong>
+                        </h2>
+                    </li>
+                </ul>
+            </div>
+            <div class="text-right">
+                <a href="https://ums.lpu.in/lpuums/Default.aspx"><i class="fas fa-home metric-search-home"
+                        style="font-size: 15px;color: #fd6c04 !important;"></i> </a>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<div class="container-fluid allocation-container" style="padding-bottom: 24px;">
+    <div class="form_wrap p-3">
+        <form #getMetric="ngForm" class="row g-3" class="cheifEng_form" (ngSubmit)="StageDecription(getMetric.value)">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="usr" >Planner Session : <span>*</span></label>
+                        <select  class="form-control input-sm" ngModel name="ddlPlanner">
+                            <option value="0" selected="selected">--Select--</option>
+                            <option  value="13" selected="selected">Academic Year (Jul 23 - Jun 24)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="inputKeyIndicator" class="form-label">Metric : <span>*</span></label>
+                        <select id="siteId" class="form-control" ngModel name="ddlmetric">
+                            <option value="0" selected="selected">--Select--</option>
+                            <option *ngFor="let dropdwon of dropdownmetric" [value]="dropdwon.metricId">
+                                {{dropdwon.metricDescription}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="siteId" class="form-label">Engineer : <span>*</span></label>
+                    <select id="siteId" class="form-control" ngModel name="ddlengineer">
+                        <option value="0" selected="selected">--Select--</option>
+                        <option *ngFor="let dropdwon of dropdownSiteEnginner" [value]="dropdwon.employeeCode">
+                            {{dropdwon.engineerName}}</option>
+                    </select>
+                </div>
+             <div class="col-md-6">
+                <div class="form-group">
+                    <div > 
+                        <button type="submit" class="btn btn-warning work_status_btns btn-back-color">Submit</button>
+                    </div>
+                </div>
+            </div>
+         </div>
+      </form>
+    </div>
+    
+    <div class="table_wrap_overflow mt-3 allocation_overflow table-responsive">
+        <table class="table table-responsive table-striped table-condensed table-sm table-bordered">
+            <thead class="highlighedTh">
+                <tr class="table-header">
+                    <th>Stage Id</th>
+                    <th>Stage Description</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Remarks</th>
+                   <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of table">
+                    <td>{{ item.stageId }}</td>
+                    <td>{{ item.stageDescription }}</td>
+                    <td>
+                        <mat-form-field class="ms-4" appearance="fill">
+                            <input matInput [matDatepicker]="picker" [(ngModel)]="item.startDate" name="startDate" [min]="minDate"  [disabled]="item.enable">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                          </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field appearance="fill">
+                            <input matInput [matDatepicker]="endDatePicker" [(ngModel)]="item.endDate" name="endDate" [min]="item.startDate"  [disabled]="item.enable">
+                            <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+                            <mat-datepicker #endDatePicker></mat-datepicker>
+                            <mat-error *ngIf="item.endDate < item.startDate">End Date must be after Start Date.</mat-error>
+                          </mat-form-field>
+                    </td>
+                    <td>
+                        <textarea id="remarks" rows="5" placeholder="Enter your Remarks" [(ngModel)]="item.Remarks" required></textarea>
+                    </td> 
+                    <td>
+                        
+                        <div>
+                            <button class="disabled" class="btn btn-warning go-btn btn-back-color"
+                                [disabled]="item.enable" (click)="saveData(item)"> Save</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" color="#fff" size="default" type="ball-spin-clockwise">
+    <p style="color: white">Please... 
